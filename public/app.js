@@ -2,7 +2,8 @@ var baseUrl = 'https://api.giphy.com//v1/gifs/search'
 var apiKey = 'api_key=dc6zaTOxFJmzC'
 
 $(document).ready(function() {
-  makeGiphyRequest();
+  makeGiphyRequest()
+  $('button').click(makeGiphyRequest)
 })
 
 function makeGiphyRequest() {
