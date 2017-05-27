@@ -1,19 +1,24 @@
-var baseUrl = 'https://api.giphy.com//v1/gifs/search'
+var baseUrl = 'https://api.giphy.com/v1/gifs/search'
 var apiKey = 'api_key=dc6zaTOxFJmzC'
+var imageUrls = []
 
 $(document).ready(function() {
-  $('button').click(makeGiphyRequest)
+  makeGiphyRequest()
+  $('button').click(function() {
+    loadImage(imageUrls[getRandomNumber(imageUrls.length)])
+  })
 })
 
 function makeGiphyRequest() {
-	var url = baseUrl
-						+ '?q=happy+birthday&fmt=json&sort=relevant&limit=100&offset=' + getRandomNumber
-						+ '&' + apiKey;
+  var url = baseUrl
+    + '?q=happy+birthday&fmt=json&sort=relevant&limit=100&offset=' + getRandomNumber
+    + '&' + apiKey;
   $.ajax(url, {
     success: function(data, status, xhr) {
-      url = data['data'][getRandomNumber()]['images']['original']['url']
+      imageUrls = data['data'].map(function(el) {
+        return el['images']['original']['url']
+      })
       loadImage(url)
-      console.log('url:', url)
     },
     error: function(xhr, status, error) {
       console.log(':-(')
@@ -23,8 +28,8 @@ function makeGiphyRequest() {
   })
 }
 
-function getRandomNumber() {
-  return Math.floor(Math.random() * 100)
+function getRandomNumber(n) {
+  return Math.floor(Math.random() * n)
 }
 
 function loadImage(url) {
@@ -34,4 +39,5 @@ function loadImage(url) {
     imageEl.src = this.src
   }
   downloadingImage.src = url
+  console.log('url:', url)
 }
